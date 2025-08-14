@@ -1,3 +1,4 @@
+```
 ATLAS_URI=mongodb+srv://<username>:<password>@sandbox.jadwj.mongodb.net/
 PORT=5050
 ```
