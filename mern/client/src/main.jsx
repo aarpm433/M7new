@@ -13,6 +13,8 @@ import { AuthProvider } from "./components/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./components/Unauthorized";
 import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 const router = createBrowserRouter([
   {

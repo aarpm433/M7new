@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Alert } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
+
 
 const Record = (props) => (
   <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
@@ -31,7 +34,7 @@ const Record = (props) => (
           color="red"
           type="button"
           onClick={() => {
-            props.deleteRecord(props.record._id);
+            props.confirmDelete(props.record._id);
           }}
         >
           Delete
@@ -43,6 +46,10 @@ const Record = (props) => (
 
 export default function RecordList() {
   const [records, setRecords] = useState([]);
+  const [alert, setAlert] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState(null);
+
 
   // This method fetches the records from the database.
   useEffect(() => {
@@ -60,14 +67,32 @@ export default function RecordList() {
     return;
   }, [records.length]);
 
+  const confirmDelete = (id) => {
+    setRecordToDelete(id);
+    setShowModal(true);
+  };
+
   // This method will delete a record
-  async function deleteRecord(id) {
-    await fetch(`http://localhost:5050/record/${id}`, {
-      method: "DELETE",
-    });
-    const newRecords = records.filter((el) => el._id !== id);
-    setRecords(newRecords);
-  }
+const handleConfirmDelete = async () => {
+    if (!recordToDelete) return;
+
+    try {
+      await fetch(`http://localhost:5050/record/${recordToDelete}`, {
+        method: "DELETE",
+      });
+      setRecords(records.filter((r) => r._id !== recordToDelete));
+      setAlert({ type: "success", message: "Record deleted successfully!" });
+      setTimeout(() => setAlert(null), 3000);
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error deleting record." });
+      console.error(error);
+    } finally {
+      setShowModal(false);
+      setRecordToDelete(null);
+    }
+  };
+
+
 
   // This method will map out the records on the table
   function recordList() {
@@ -75,8 +100,8 @@ export default function RecordList() {
       return (
         <Record
           record={record}
-          deleteRecord={() => deleteRecord(record._id)}
           key={record._id}
+          confirmDelete={confirmDelete}
         />
       );
     });
@@ -84,7 +109,13 @@ export default function RecordList() {
 
   // This following section will display the table with the records of individuals.
   return (
+    
     <>
+      {alert && (
+        <Alert variant={alert.type} className="mb-3 mx-4">
+          {alert.message}
+        </Alert>
+      )}
       <h3 className="text-lg font-semibold p-4">Agents List</h3>
       <div className="border rounded-lg overflow-hidden">
         <div className="relative w-full overflow-auto">
@@ -117,6 +148,20 @@ export default function RecordList() {
           </table>
         </div>
       </div>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this record?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

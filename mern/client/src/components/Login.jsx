@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import { Alert } from "react-bootstrap";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [alert, setAlert] = useState(null);
 
   function updateForm(value) {
     setForm((prev) => ({ ...prev, ...value }));
@@ -20,15 +22,22 @@ export default function Login() {
     });
     if (response.ok) {
       login();
-      navigate("/", { replace: true });
+      setAlert({ type: "success", message: "Login successful!" });
+      setTimeout(() => navigate("/", { replace: true }), 1500);
     } else {
-      navigate("/unauthorized", { replace: true });
+      setAlert({type: "danger", message: "Login failed. Please check your credentials."});
+      setTimeout(() => navigate("/unauthorized", { replace: true }), 1500);
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="p-4 max-w-sm mx-auto">
       <h2 className="text-lg font-semibold mb-4">Login</h2>
+      {alert && (
+        <Alert variant={alert.type} className="mb-3">
+          {alert.message}
+        </Alert>
+      )}
       <input
         type="email"
         placeholder="Email"
@@ -43,7 +52,10 @@ export default function Login() {
         onChange={(e) => updateForm({ password: e.target.value })}
         className="block w-full mb-4 p-2 border rounded"
       />
-      <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
+      <button
+        type="submit"
+        className="w-full bg-blue-600 text-white p-2 rounded"
+      >
         Login
       </button>
     </form>

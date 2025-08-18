@@ -64,3 +64,8 @@ In this repo, I like how the commits are named, it is very clear and distinct wh
 
 https://github.com/Beomar97/mern-template 
 I like how this template is a bit simpler than the other one, with less information and files, it allows for a better understanding of how this is coded and what is happening. I like this because I am a beginner and am still figuring our the inner workings of React and Mern stacks.
+
+
+What is a component?
+
+
