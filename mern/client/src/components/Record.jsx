@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
+import {Alert,Modal,Button} from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
+
+
 
 export default function Record() {
   const [form, setForm] = useState({
@@ -12,6 +15,10 @@ export default function Record() {
   const [isNew, setIsNew] = useState(true);
   const params = useParams();
   const navigate = useNavigate();
+  const [alert, setAlert] = useState(null);
+    const [showConfirm, setShowConfirm] = useState(false);
+
+
 
   useEffect(() => {
     async function fetchData() {
@@ -39,57 +46,58 @@ export default function Record() {
   }, [params.id, navigate]);
 
   // These methods will update the state properties.
-  function updateForm(value) {
-    return setForm((prev) => {
-      return { ...prev, ...value };
-    });
-  }
+  const updateForm = (value) => setForm((prev) => ({ ...prev, ...value }));
+
+  const handleSubmitClick = (e) => {
+    e.preventDefault();
+    setShowConfirm(true);
+  };
+
 
   // This function will handle the submission.
-  async function onSubmit(e) {
-    e.preventDefault();
-    const person = { ...form };
+  const handleConfirmSave = async () => {
+    setShowConfirm(false);
     try {
-      let response;
-      if (isNew) {
-        // if we are adding a new record we will POST to /record.
-        response = await fetch("http://localhost:5050/record", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(person),
-        });
-      } else {
-        // if we are updating a record we will PATCH to /record/:id.
-        response = await fetch(`http://localhost:5050/record/${params.id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(person),
-        });
-      }
+      const response = await fetch(
+        isNew
+          ? "http://localhost:5050/record"
+          : `http://localhost:5050/record/${params.id}`,
+        {
+          method: isNew ? "POST" : "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      setAlert({
+        type: "success",
+        message: `Record ${isNew ? "added" : "updated"} successfully!`,
+      });
+      setTimeout(() => {
+        setAlert(null);
+        navigate("/");
+      }, 1500);
     } catch (error) {
-      console.error("A problem occurred adding or updating a record: ", error);
-    } finally {
-      setForm({ name: "", region: "", rating: "", fee: "", sales: "" });
-      navigate("/");
+      setAlert({ type: "danger", message: "Error saving record." });
+      console.error(error);
     }
-  }
-
+  };
   // This following section will display the form that takes the input from the user.
   return (
     <>
       <h3 className="text-lg font-semibold p-4">
         Create/Update Employee Record
       </h3>
+
+      {alert && (
+        <Alert variant={alert.type} className="mb-3 mx-4">
+          {alert.message}
+        </Alert>
+      )}
 <form
-  onSubmit={onSubmit}
+  onSubmit={handleSubmitClick}
   className="border rounded-lg overflow-hidden p-4"
 >
   <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-slate-900/10 pb-12 md:grid-cols-2">
@@ -271,10 +279,25 @@ export default function Record() {
     />
   </div>
 </form>
+  {/* Confirmation Modal */}
+      <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Save</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to {isNew ? "add" : "update"} this record?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirm(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleConfirmSave}>
+            Yes, {isNew ? "Add" : "Update"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
-
-
 
 
