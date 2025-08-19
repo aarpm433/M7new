@@ -36,7 +36,7 @@ export default function Record() {
       const record = await response.json();
       if (!record) {
         console.warn(`Record with id ${id} not found`);
-        navigate("/");
+        navigate("/agent-management", { replace: true });
         return;
       }
       setForm(record);
@@ -77,7 +77,7 @@ export default function Record() {
       });
       setTimeout(() => {
         setAlert(null);
-        navigate("/");
+        navigate("/agent-management", { replace: true });
       }, 1500);
     } catch (error) {
       setAlert({ type: "danger", message: "Error saving record." });

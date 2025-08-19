@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 import { Modal, Button } from "react-bootstrap";
+
+
 
 
 const Record = (props) => (
@@ -49,7 +51,6 @@ export default function RecordList() {
   const [alert, setAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState(null);
-  const navigate = useNavigate();
 
 
   // This method fetches the records from the database.
@@ -111,15 +112,18 @@ const handleConfirmDelete = async () => {
   // This following section will display the table with the records of individuals.
   return (
     
+    
     <>
+
+    <button type="button" class="btn btn-primary">Primary</button>
+
+
       {alert && (
         <Alert variant={alert.type} className="mb-3 mx-4">
           {alert.message}
         </Alert>
       )}
-
       <h3 className="text-lg font-semibold p-4">Agents Management</h3>
-      <button type="button" className="btn btn-primary btn-lg" onClick={()=>navigate("/create")} >Create Agent</button>
       <div className="border rounded-lg overflow-hidden">
         <div className="relative w-full overflow-auto">
           <table className="w-full caption-bottom text-sm">
