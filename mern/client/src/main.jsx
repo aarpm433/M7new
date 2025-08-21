@@ -5,6 +5,7 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 import App from "./App";
 import Record from "./components/Record";
 import RecordList from "./components/RecordList";
@@ -70,7 +71,10 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
+  <CookiesProvider>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  </CookiesProvider>
+
 );
