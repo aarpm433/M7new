@@ -16,6 +16,11 @@ import Unauthorized from "./components/Unauthorized";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cards from "./components/Cards";
+import TransactionPage from "./components/TransactionsPage";
+
+
+
+
 
 
 
@@ -55,7 +60,7 @@ const router = createBrowserRouter([
         path: "/transactions",
         element: <App />,
         children: [
-          { path: "/transactions", element: <h2>Transactions Page</h2>  },
+          { path: "/transactions", element: <TransactionPage />  },
         ],
       }
     ],
