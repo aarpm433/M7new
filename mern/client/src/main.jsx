@@ -5,6 +5,7 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 import App from "./App";
 import Record from "./components/Record";
 import RecordList from "./components/RecordList";
@@ -15,6 +16,11 @@ import Unauthorized from "./components/Unauthorized";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cards from "./components/Cards";
+import TransactionPage from "./components/TransactionsPage";
+
+
+
+
 
 
 
@@ -54,7 +60,7 @@ const router = createBrowserRouter([
         path: "/transactions",
         element: <App />,
         children: [
-          { path: "/transactions", element: <h2>Transactions Page</h2>  },
+          { path: "/transactions", element: <TransactionPage />  },
         ],
       }
     ],
@@ -70,7 +76,10 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
+  <CookiesProvider>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  </CookiesProvider>
+
 );
