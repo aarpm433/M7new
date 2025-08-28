@@ -118,7 +118,6 @@ export default function TransactionPage() {
 
             <button
             className="btn btn-primary"
-            disabled={!form.agent_id || !form.amount}
             onClick={() => setShowConfirm(true)}
             >
             Submit
