@@ -69,4 +69,13 @@ I like how this template is a bit simpler than the other one, with less informat
 
 What is a component?
 
+A component is a piece of UI that is reusable. For example, this could be a button, table, modal, a form, etc. There are two types of these components, type components which are what is most commonly used nowadays are return JSX. There are also class components which are an older style of doing things that have been overshadowed by type components and are obviously nowadays less used. These class components are a JavaScript class that extend React.Component. A reason why we want to use components is it makes our lives much easier. The reusability of these blocks make it so if you build a button once anywhere you can reuse it and modify it for wanted used. It's also much more manageable than bigger blocks of code since it let's you break down big blocks into small blocks.
+
+What are Properties?
+Proprs are a way to send read-only data and functions into a component. How this works is the parent gives a child data as attributes and the child percieves this as an object(props)
+
+what is State?
+State is a big different than properties. In the way that the data is managed, these two are fundamentally different. When state changes, the component is re-rendered automatically by React. The way that state is used is with hooks, most commonly the useState hook which allows to keep count of things. 
+
+
 
