@@ -68,6 +68,11 @@ export default function Record() {
           body: JSON.stringify(form),
         }
       );
+      const { name, rating, fee, sales, region } = form;
+      if (!rating||!fee||!sales ||!region||!name) {
+        setAlert({ type: "danger", message: "All fields are required." });
+        return;
+      }
 
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 

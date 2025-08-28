@@ -5,6 +5,6 @@ const sessionSchema = new mongoose.Schema({
   token: { type: String, required: true },
 }, { timestamps: true });
 
-sessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 }); // TTL 24h
+sessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 }); 
 
 export default mongoose.model("Session", sessionSchema);
