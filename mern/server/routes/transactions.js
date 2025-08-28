@@ -13,7 +13,6 @@ router.get("/transaction-data", async (req, res) => {
       .limit(10);
 
     const agents = await Record.find({}, "_id name"); // dropdown list
-    console.log("Agents fetched:", agents); // DEBUG
 
 
 
